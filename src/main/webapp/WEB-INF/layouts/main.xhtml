@@ -19,7 +19,7 @@
                 <p:menubar>
                     <p:menuitem value="#{msg['navbar.texto.inicio']}" outcome="index" icon="pi pi-fw pi-home"/>
                     <p:menuitem value="#{msg['navbar.texto.crear']}" onclick="PF('dialogForm').show()" icon="pi pi-fw pi-plus" rendered="#{p:ifGranted('ADMIN')}"/>
-                    <p:menuitem icon="pi pi-fw pi-flag" rendered="#{p:ifAnyGranted({'ADMIN', 'USER'})}">
+                    <p:menuitem icon="pi pi-fw pi-flag" rendered="#{p:ifAnyGranted('ADMIN,USER')}">
                         <p:selectOneMenu value="#{lenguajeController.lenguaje}"
                                          valueChangeListener="#{lenguajeController.seleccionar}"
                                          onchange="submit()">
@@ -34,7 +34,7 @@
                 <p:messages globalOnly="true" closable="true">
                     <p:autoUpdate/>
                 </p:messages>
-                <h:outputText value="Bienvenido: #{p:userPrincipal()}" rendered="#{p:ifAnyGranted({'ADMIN', 'USER'})}"/>
+                <h:outputText value="Bienvenido: #{p:userPrincipal()}" rendered="#{not empty p:userPrincipal()}"/>
                 <ui:insert name="content"/>
             </div>
             <p:divider/>
