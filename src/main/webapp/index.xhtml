@@ -12,7 +12,7 @@
                 <h:outputText value="#{titulo}"/>
             </f:facet>
             <p:divider/>
-            <h:form id="crearForm">
+            <h:form id="crearForm" rendered="#{p:ifGranted('ADMIN')}">
                 <p:commandButton value="#{msg['navbar.texto.crear']}" class="p-my-2" onclick="PF('dialogForm').show()" icon="pi pi-plus-circle">
                     <p:resetInput target="formProducto"/>
                 </p:commandButton>
@@ -61,7 +61,7 @@
                         <f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="#{msg['producto.boton.editar']}">
+                <p:column headerText="#{msg['producto.boton.editar']}" rendered="#{p:ifGranted('ADMIN')}">
                     <h:form id="editarForm">
                         <p:commandButton value="#{msg['producto.boton.editar']}" action="#{productoController.editar(prod.id)}"
                                          class="ui-button-success" onclick="PF('dialogForm').show()" icon="pi pi-save" update="formProducto">
@@ -69,7 +69,7 @@
                         </p:commandButton>
                     </h:form>
                 </p:column>
-                <p:column headerText="#{msg['producto.boton.eliminar']}">
+                <p:column headerText="#{msg['producto.boton.eliminar']}" rendered="#{p:ifGranted('ADMIN')}">
                     <h:form id="eliminar">
                         <p:commandButton value="#{msg['producto.boton.eliminar']}" action="#{productoController.eliminar(prod)}"
                                        onclick="return confirm('¿Está seguro que desea eliminar el producto: #{prod.nombre}?')"
@@ -78,7 +78,7 @@
                 </p:column>
             </p:dataTable>
             <p:dialog  header="#{productoController.producto.id>0? msg['producto.boton.editar']: msg['producto.boton.crear']} #{msg['producto.texto']}"
-                       widgetVar="dialogForm" minHeight="200" minWidth="500" showEffect="fade" modal="true">
+                       widgetVar="dialogForm" minHeight="200" minWidth="500" showEffect="fade" modal="true" rendered="#{p:ifGranted('ADMIN')}">
                 <p:ajax event="close" listener="#{productoController.cerrarDialogo}" update="formProducto" />
                 <ui:include src="form.xhtml" />
             </p:dialog>
