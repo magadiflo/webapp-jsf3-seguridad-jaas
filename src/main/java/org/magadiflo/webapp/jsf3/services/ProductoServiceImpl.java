@@ -1,8 +1,10 @@
 package org.magadiflo.webapp.jsf3.services;
 
+import jakarta.annotation.Resource;
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.SessionContext;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.magadiflo.webapp.jsf3.entities.Categoria;
@@ -10,6 +12,7 @@ import org.magadiflo.webapp.jsf3.entities.Producto;
 import org.magadiflo.webapp.jsf3.repositories.CrudRepository;
 import org.magadiflo.webapp.jsf3.repositories.ProductoRepository;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +26,23 @@ public class ProductoServiceImpl implements ProductoService {
     @Inject
     private CrudRepository<Categoria> categoriaCrudRepository;
 
+    @Resource
+    private SessionContext ctx;
+
     @PermitAll
     @Override
     public List<Producto> listar() {
+        Principal usuario = this.ctx.getCallerPrincipal();
+        String username = usuario.getName();
+        System.out.println("username ----------------> " + username);
+        if(this.ctx.isCallerInRole("ADMIN")){
+            System.out.println("******** Hola soy un administrador ***** ");
+        } else if(this.ctx.isCallerInRole("USER")){
+            System.out.println("******** Hola soy un usuario normal ***** ");
+        } else {
+            System.out.println("*********** Hola soy un usuario anonimo *******");
+            //throw new SecurityException("Lo sentimos no tiene permismo para acceder a esta pagina");
+        }
         return this.productoCrudRepository.listar();
     }
 
